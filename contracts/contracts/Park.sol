@@ -3,10 +3,11 @@ pragma solidity ^0.8.9;
 
 contract ParkingContract {
     struct ParkingDetails {
+        uint256 parkingId;
         string name;
         string place;
         string pincode;
-        bytes32 imageHash; // Use a single bytes32 instead of an array
+        string imageHash; // Updated to string
         address creatorWallet;
         address buyerWallet;
         uint256 amount;
@@ -24,19 +25,19 @@ contract ParkingContract {
         string memory name,
         string memory place,
         string memory pincode,
-        bytes32 imageHash, // Use a single bytes32 instead of an array
+        string memory imageHash, // Updated to string
         uint256 amount,
         string memory day,
         string memory time
     ) public {
         require(msg.sender.balance >= amount, "Insufficient balance");
-        // payable(msg.sender).transfer(amount);
 
         ParkingDetails storage details = parkingSpaces[counter];
+        details.parkingId = counter;
         details.name = name;
         details.place = place;
         details.pincode = pincode;
-        details.imageHash = imageHash; // Use a single bytes32 instead of an array
+        details.imageHash = imageHash; // Updated to string
         details.creatorWallet = msg.sender;
         details.amount = amount;
         details.day = day;
@@ -53,10 +54,11 @@ contract ParkingContract {
         public
         view
         returns (
+            uint256,
             string memory name,
             string memory place,
             string memory pincode,
-            bytes32 imageHash, // Use a single bytes32 instead of an array
+            string memory imageHash, // Updated to string
             address creatorWallet,
             address buyerWallet,
             uint256 amount,
@@ -68,10 +70,11 @@ contract ParkingContract {
     {
         ParkingDetails storage details = parkingSpaces[parkingId];
         return (
+            details.parkingId,
             details.name,
             details.place,
             details.pincode,
-            details.imageHash, // Use a single bytes32 instead of an array
+            details.imageHash,
             details.creatorWallet,
             details.buyerWallet,
             details.amount,
@@ -112,7 +115,6 @@ contract ParkingContract {
             parkingSpaces[parkingId].buyerWallet != address(0),
             "No buyer assigned for the parking"
         );
-        // Attempt to transfer the amount from the buyer to the creator
         bool transferSuccess = payable(parkingSpaces[parkingId].buyerWallet)
             .send(amount);
         require(transferSuccess, "Transfer failed");

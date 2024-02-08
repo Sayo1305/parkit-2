@@ -6,6 +6,7 @@ import Addparking from './pages/Addparking';
 import BuyParking from './pages/BuyParking';
 import Placedetails from './pages/Placedetails';
 import Navbar from './components/Navbar';
+import MyParking from './pages/Myparking';
 // import GetDatabase from './utils/GetDatabase';
 function App() {
   // useEffect(()=>{
@@ -19,6 +20,7 @@ function App() {
         <Route path='/AddParking' element={<Addparking/>}></Route>
         <Route path='/BuyParking' element={<BuyParking/>}></Route>
         <Route path='/Placedetail/:id' element={<Placedetails/>}></Route>
+        <Route path='/myparking' element={<MyParking/>}></Route>
       </Routes>
     </div>
   );

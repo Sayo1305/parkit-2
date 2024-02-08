@@ -1,21 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Appcontext } from "../context/Appcontext";
 import bg from "../images/form_fill.jpg";
-import { Button, DatePicker, Form, Input, TimePicker } from "antd";
+import { Button, DatePicker, Form, Input, TimePicker, notification } from "antd";
 import ImageModal from "./ImageModal";
 import { ethers } from "ethers";
-import { CheckCircleOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import abi from "../utils/contractAbi.json";
 import dayjs from "dayjs";
 const Input_form = () => {
   const context = useContext(Appcontext);
   const [Imagefile, setImagefile] = useState([]);
   const { Walletaddress } = context;
+  const {form} = Form.useForm();
+  const [loading , setLoading] = useState(false);
   const [openImageModal , setOpenImageModal] = useState(false);
 
   const GetContract = async ()=>{
     try{
-      const contractAddress  = "0x73aa408d982FB33B7D42c4948887f125bA1C3288";
+      const contractAddress  = "0x381E6D4e0894584717183781a28EfF164E20F504";
       const contractAbi = abi.abi;
       const provider = new ethers.BrowserProvider(window.ethereum);//read the Blockchain
       const signer =  await provider.getSigner(); //write the blockchain
@@ -36,19 +38,26 @@ const Input_form = () => {
     const formattedDate = dayjs(values.date).format('YYYY-MM-DD');
     values.time = formattedTime;
     values.date = formattedDate;
-    values.image = ethers.encodeBytes32String("jdijdjdi");
+    values.image = Imagefile;
     values.walletAddress = Walletaddress;
     values.amount = ethers.parseEther(values.amount);
     try{
       const contract = await GetContract();
       if(contract){
+        setLoading(true);
         const res  = await contract.storePark(values.tagline, values.place , values.pincode , values.image , values.amount , values.date , values.time);
-        console.log(res);
+        if(res){
+          notification.success({message : "Items  listed successfully"});
+        }
       }else{
         console.log("contract not there");
+        notification.error({message : "error in saving try again.. "});
       }
     }catch(e){
       console.log(e);
+      notification.error({message : "error in saving try again.. "});
+    }finally{
+      setLoading(false);
     }
   };
   return (
@@ -57,6 +66,7 @@ const Input_form = () => {
       <div className="w-full text-center p-3 text-2xl font-bold">Add Parking Slot</div>
       <div className="w-5/6 mx-auto my-0  flex md:flex-row flex-col-reverse items-center justify-between">
         <Form
+        ref={form}
           onFinish={handle_submit}
           className="md:w-1/2 w-full bg-[#D5F8E7] p-4 rounded-md flex flex-col !gap-0"
           layout="vertical"
@@ -101,7 +111,7 @@ const Input_form = () => {
               htmlType="submit"
               className="bg-blue-200 text-blue-600 flex items-center justify-center border-blue-900 text-lg px-10"
             >
-              Submit
+              Submit {loading === true && <LoadingOutlined/>}
             </Button>
           </Form.Item>
         </Form>

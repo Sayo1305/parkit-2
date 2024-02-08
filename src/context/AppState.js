@@ -9,7 +9,7 @@ const AppState = (props) => {
   const [datalist, setdatalist] = useState([]);
   const GetContract = async ()=>{
     try{
-      const contractAddress  = "0x73aa408d982FB33B7D42c4948887f125bA1C3288";
+      const contractAddress  = "0x381E6D4e0894584717183781a28EfF164E20F504";
       const contractAbi = abi.abi;
       const provider = new ethers.BrowserProvider(window.ethereum);//read the Blockchain
       const signer =  await provider.getSigner(); //write the blockchain

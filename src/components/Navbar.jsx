@@ -1,4 +1,3 @@
-import { TempleWallet } from "@temple-wallet/dapp";
 
 import { useContext, useEffect, useState , React } from "react";
 import { Appcontext } from "../context/Appcontext";
@@ -54,6 +53,9 @@ const Navbar = () => {
         Park<span className="text-purple-600 not-italic">iT</span>
       </div>
       <div className="flex gap-2 items-center">
+      <div onClick={()=> navigate('/myparking')} className="bg-purple-500 text-white p-2 rounded-md cursor-pointer shadow-md outline-none border-none">
+          My Parking
+        </div>
         <div onClick={()=> navigate('/BuyParking')} className="bg-blue-500 text-white p-2 rounded-md cursor-pointer shadow-md outline-none border-none">
           Find Parking
         </div>
