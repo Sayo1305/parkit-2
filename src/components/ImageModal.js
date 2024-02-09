@@ -1,5 +1,5 @@
-import { CloudUploadOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Button, Modal } from "antd";
+import { CloudUploadOutlined, DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
+import { Button, Modal, notification } from "antd";
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { Toast } from "./Toast";
@@ -8,7 +8,7 @@ import { Toast } from "./Toast";
 const ImageModal = ({ open, setopen, setFilesUpload }) => {
   const [imagePrev, setImagePrev] = useState([]);
   const [images , setImages] = useState([]);
-
+  const [loading , setLoading] = useState(false);
   const handleDelete = (index) => {
     const updatedImagePrev = [...imagePrev];
     updatedImagePrev.splice(index, 1);
@@ -24,6 +24,7 @@ const ImageModal = ({ open, setopen, setFilesUpload }) => {
   };
   const handleUpload = async (fileList) => {
       try {
+        setLoading(true);
         // Convert fileList object to an array of files
         const filesArray = Object.values(fileList);
     
@@ -60,15 +61,17 @@ const ImageModal = ({ open, setopen, setFilesUpload }) => {
             const data = await res.json();
             // console.log(data);
             setFilesUpload(data?.IpfsHash);
-            Toast.fire({
-              icon : "success",
-              text : "Images Uploaded",
-            });
+           notification.success({message : "Images uploaded successfully"});
             setopen(false);
+          }else{
+            notification.error({message : "error uploading images"});
           }
         }
       } catch (e) {
         console.log(e);
+        notification.error({message : "error uploading images"});
+      }finally{
+        setLoading(false);
       }
     };
     
@@ -117,7 +120,7 @@ const ImageModal = ({ open, setopen, setFilesUpload }) => {
             ))}
         </div>
 
-        <Button onClick={()=>{handleUpload(images)}}>Upload</Button>
+        <Button onClick={()=>{handleUpload(images)}} className="flex items-center gap-2">Upload {loading === true && <LoadingOutlined/>}</Button>
       </div>
     </Modal>
   );

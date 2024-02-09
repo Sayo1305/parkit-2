@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import sampleImage from "../images/R1.jpg";
 import { ethers } from "ethers";
 import { Tooltip, notification } from "antd";
-import { ClockCircleFilled } from "@ant-design/icons";
+import { CarOutlined, ClockCircleFilled } from "@ant-design/icons";
 
 const Card = ({ data }) => {
   const [imageurl, setImageUrl] = useState([]);
@@ -112,6 +112,8 @@ const MyParking = () => {
 
   return (
     <div>
+      <div className="px-16 py-2 text-3xl font-semibold">Parking created by You <CarOutlined/></div>
+      <div className="mx-auto   w-11/12 h-[1px] bg-slate-400"></div>
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-items-center w-5/6 mx-auto my-0 !gap-5 p-4 flex-wrap">
         {myParking.length !== 0 ? (
           myParking.map((parking, index) => <Card data={parking} key={index} />)
