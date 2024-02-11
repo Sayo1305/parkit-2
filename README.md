@@ -7,6 +7,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 <a href="https://www.freepik.com/free-vector/forms-concept-illustration_12445723.htm#fromView=search&term=fill+form+&track=ais&regularType=vector&page=1&position=2&uuid=6ade2bec-9e49-49a2-b7c9-59a4b7769d26">Image by storyset</a> on Freepik
 
 
+## screenshots
+<img width="600" alt="Screenshot 2024-02-12 at 3 43 18 AM" src="https://github.com/Sayo1305/parkit-2/assets/84987518/5ddd668a-072e-4ca7-b6f4-ee091d46d1a1">
+<img width="600" alt="Screenshot 2024-02-12 at 3 43 29 AM" src="https://github.com/Sayo1305/parkit-2/assets/84987518/975ebb4f-2042-451c-9572-8a37d636b8d9">
+<img width="600" alt="Screenshot 2024-02-12 at 3 43 43 AM" src="https://github.com/Sayo1305/parkit-2/assets/84987518/7f7de91c-eb04-4830-9a5b-95958e3c78ff">
+<img width="600" alt="Screenshot 2024-02-12 at 3 43 56 AM" src="https://github.com/Sayo1305/parkit-2/assets/84987518/b6f776b3-b965-4e31-9b9f-8c4f4573e5d0">
+
+
 ## Available Scripts
 
 In the project directory, you can run:
