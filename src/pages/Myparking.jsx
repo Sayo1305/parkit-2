@@ -90,6 +90,7 @@ const Card = ({ data }) => {
 const MyParking = () => {
   const { GetContract, Walletaddress } = useContext(Appcontext);
   const [myParking, setMyParking] = useState([]);
+  const [totalRevenue , setTotalRevenue] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,6 +102,10 @@ const MyParking = () => {
             const myParkingData = data?.filter(
               (parking) => parking?.creatorWallet?.toLowerCase() === Walletaddress?.toLowerCase()
             );
+            let totalRevenue = myParkingData.reduce((total, parking) => {
+              return total + parseInt(parking?.revenue || 0);
+            }, 0);
+            setTotalRevenue(totalRevenue);
             setMyParking(myParkingData);
         }else{
             notification.error({message  : "error getting parking details"});
@@ -118,7 +123,10 @@ const MyParking = () => {
 
   return (
     <div>
-      <div className="px-16 py-2 text-3xl font-semibold">Parking created by You <CarOutlined/></div>
+      <div className="px-16 flex items-center justify-between py-2 text-3xl font-semibold">
+        <div>Parking created by You <CarOutlined/> </div>
+        <div>Total Revenue : {totalRevenue}</div>
+      </div>
       <div className="mx-auto   w-11/12 h-[1px] bg-slate-400"></div>
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-items-center w-5/6 mx-auto my-0 !gap-5 p-4 flex-wrap">
         {myParking.length !== 0 ? (

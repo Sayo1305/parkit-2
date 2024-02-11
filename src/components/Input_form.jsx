@@ -10,29 +10,12 @@ import dayjs from "dayjs";
 const Input_form = () => {
   const context = useContext(Appcontext);
   const [Imagefile, setImagefile] = useState([]);
-  const { Walletaddress } = context;
+  const { Walletaddress  , GetContract} = context;
   const {form} = Form.useForm();
   const [loading , setLoading] = useState(false);
   const [openImageModal , setOpenImageModal] = useState(false);
+  
 
-  const GetContract = async ()=>{
-    try{
-      const contractAddress  = "0xbd35c4C020aF0851854681e4813EDd370753B830";
-      const contractAbi = abi.abi;
-      const provider = new ethers.BrowserProvider(window.ethereum);//read the Blockchain
-      const signer =  await provider.getSigner(); //write the blockchain
-      const contract = new ethers.Contract(
-        contractAddress,
-        contractAbi,
-        signer
-      );
-    
-      return contract;
-    }catch(err){
-      console.log(err)
-      return null;
-    }
-  }
   const handle_submit = async (values) => {
     const formattedTime = dayjs(values.time).format('HH:mm:ss');
     const formattedDate = dayjs(values.date).format('YYYY-MM-DD');
@@ -47,7 +30,7 @@ const Input_form = () => {
         setLoading(true);
         const res  = await contract.storePark(values.tagline, values.place , values.pincode , values.image , values.amount , values.date , values.time);
         if(res){
-          notification.success({message : "Items  listed successfully"});
+          notification.success({message : "Items  listed successfully, it may take a few minutes, as it is on testnet."});
         }
       }else{
         console.log("contract not there");

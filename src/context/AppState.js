@@ -7,9 +7,9 @@ const AppState = (props) => {
   const [Walletconnection, setwalletconnection] = useState(false);
   const [Walletaddress, setWalletaddress] = useState("");
   const [datalist, setdatalist] = useState([]);
+  const contractAddress = process.env.REACT_APP_CONTRACT;
   const GetContract = async ()=>{
     try{
-      const contractAddress  = "0xbd35c4C020aF0851854681e4813EDd370753B830";
       const contractAbi = abi.abi;
       const provider = new ethers.BrowserProvider(window.ethereum);//read the Blockchain
       const signer =  await provider.getSigner(); //write the blockchain

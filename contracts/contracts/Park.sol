@@ -76,7 +76,7 @@ contract ParkingContract {
         parkingSpaces[parkingId].buyerWallet = buyer;
     }
 
-    function finishPark(uint256 parkingId, uint256 amount) public {
+    function finishPark(uint256 parkingId, uint256 amount) public  payable{
         require(
             !parkingSpaces[parkingId].completed,
             "Parking rental already completed"
@@ -89,9 +89,7 @@ contract ParkingContract {
             parkingSpaces[parkingId].buyerWallet != address(0),
             "No buyer assigned for the parking"
         );
-        bool transferSuccess = payable(parkingSpaces[parkingId].creatorWallet)
-            .send(amount);
-        require(transferSuccess, "Transfer failed");
+        payable(parkingSpaces[parkingId].creatorWallet).transfer(amount);
         parkingSpaces[parkingId].revenue += amount;
         parkingSpaces[parkingId].completed = true;
     }

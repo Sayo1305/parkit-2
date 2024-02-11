@@ -1,5 +1,3 @@
-/** @format */
-
 import { Button, Tooltip, notification } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useNavigation, useParams } from "react-router-dom";
@@ -12,6 +10,8 @@ const Placedetails = () => {
    const [dataset, setdataset] = useState([]);
    const [imageurl, setImageUrl] = useState([]);
    const router = useNavigate();
+   const [loadingRestart , setLoadingRestart] = useState(false);
+   const [loadingCancel  , setLoadingCancel] = useState(false);
    const [loading, setLoading] = useState(false);
    const [loadingFinish , setLoadingFinish]  = useState(false);
    const { id } = useParams();
@@ -39,7 +39,7 @@ const Placedetails = () => {
             // Replace `buyerAddress` with the address of the buyer
             // console.log("contract" , contract);
             await contract.fillPark(parkingId, Walletaddress);
-            notification.success({ message: "Parking filled successfully" });
+            notification.success({ message: "Parking filled successfully, it may take a minute to show, as it work on testnet." });
          } else {
             notification.error({ message: "Couldn't get contract, please try again" });
          }
@@ -53,13 +53,20 @@ const Placedetails = () => {
 
    const finishPark = async (amount) => {
       try {
+         if(amount !== 0)
          setLoadingFinish(true);
+      else setLoadingCancel(true);
          const contract = await GetContract();
          if (contract) {
             const parkingId = id; // Assuming `id` is the parking ID you want to finish
             // Replace `amount` with the amount to be transferred
-            await contract.finishPark(parkingId, amount);
-            notification.success({ message: "Parking finished successfully" });
+            if(amount !== 0){
+
+               await contract.finishPark(parkingId, parseInt(amount));
+            }else{
+               await contract.finishPark(parkingId, (amount));
+            }
+            notification.success({ message: "Parking finished successfully, it may take time as it is working on testnet" });
          } else {
             notification.error({ message: "Couldn't get contract, please try again" });
          }
@@ -68,6 +75,27 @@ const Placedetails = () => {
          notification.error({ message: "An error occurred while finishing the park" });
       } finally {
          setLoadingFinish(false);
+         setLoadingCancel(false);
+      }
+   };
+
+   const restartParking = async () => {
+      try {
+         setLoadingRestart(true);
+         const contract = await GetContract();
+         if (contract) {
+            const parkingId = id; // Assuming `id` is the parking ID you want to finish
+
+            await contract.generateNewParking(parkingId);
+            notification.success({ message: "Parking started successfully, it may take a while as working on testnet" });
+         } else {
+            notification.error({ message: "Couldn't get contract, please try again" });
+         }
+      } catch (err) {
+         console.error(err);
+         notification.error({ message: "An error occurred while finishing the park" });
+      } finally {
+         setLoadingRestart(false);
       }
    };
    
@@ -94,7 +122,6 @@ const Placedetails = () => {
    const calculateAmountEarned = (startDate, startTime, hourlyRate) => {
       const startDateTime = new Date(`${startDate}T${startTime}`);
       const targetDateTime = new Date();
-
       // If the target date is before the start date, return 0
       if (targetDateTime < startDateTime) {
          return 0;
@@ -109,7 +136,7 @@ const Placedetails = () => {
       // Calculate the amount earned
       const amountEarned = timeDiffHours * ethers.formatEther(hourlyRate);
 
-      return amountEarned.toFixed(3); // Assuming Ethereum amount has 3 decimal places
+      return amountEarned.toFixed(6); // Assuming Ethereum amount has 3 decimal places
    };
 
    if (dataset.length === 0) {
@@ -192,18 +219,18 @@ const Placedetails = () => {
          </div>
          <div className="w-5/6 mx-auto flex flex-col -top-10 items-start justify-between  relative p-5  bg-white z-20 my-0">
             <div className=" flex items-center gap-5 mb-3 ">
-               {dataset?.available === false &&
+               {dataset?.available === false && dataset?.completed === false &&
                   dataset?.buyerWallet?.toLowerCase() === Walletaddress?.toLowerCase() && (
                      <div>
                         <div className="flex items-center gap-3">
                            <div className="text-xl font-semibold">Total expense: </div>
                            <div onClick={()=>{finishPark(calculateAmountEarned(dataset?.day, dataset?.time, dataset?.amount))}} className="text-xs border-2 cursor-pointer border-green-500 bg-green-50 text-green-500 rounded-md p-2">
-                              Complete Parking
+                              Complete Parking {loadingFinish === true && <LoadingOutlined/>}
                            </div>
                            {calculateAmountEarned(dataset?.day, dataset?.time, dataset?.amount) <=
                               0 && (
                               <div onClick={()=>{finishPark(0)}} className="text-xs border-2 cursor-pointer border-red-500 bg-red-50 text-red-500 rounded-md p-2">
-                                 Cancel Parking
+                                 Cancel Parking {loadingCancel === true && <LoadingOutlined/>}
                               </div>
                            )}
                         </div>
@@ -215,6 +242,11 @@ const Placedetails = () => {
                         </div>
                      </div>
                   )}
+
+               {dataset?.available === false &&  dataset?.completed === true &&
+                dataset?.creatorWallet?.toLowerCase() === Walletaddress?.toLowerCase() && 
+                <div onClick={()=>{restartParking()}} className="px-2 cursor-pointer py-1 border rounded-md text-green-500 bg-green-50 border-green-500">Restart Parking {loadingRestart === true && <LoadingOutlined/>}</div>
+               }
             </div>
 
             <div className="text-xl mb-3 font-semibold">Timmings</div>

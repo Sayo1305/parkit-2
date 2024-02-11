@@ -87,7 +87,7 @@ const BuyParking = () => {
          try {
             const contract = await GetContract();
             const data = await contract.getAllParkDetails();
-            console.log(data)
+            //console.log(data)
             const parkingData = data?.filter(
                (parking) => parking?.creatorWallet?.toLowerCase() !== Walletaddress?.toLowerCase()
             );
