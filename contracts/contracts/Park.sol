@@ -10,6 +10,7 @@ contract ParkingContract {
         string imageHash; // Updated to string
         address creatorWallet;
         address buyerWallet;
+        uint256 revenue; // New field to track revenue
         uint256 amount;
         string day;
         string time;
@@ -44,46 +45,19 @@ contract ParkingContract {
         details.time = time;
         details.available = true;
         details.completed = false;
+        details.revenue = 0;
 
         parkingIdByWallet[msg.sender] = counter;
 
         counter++;
     }
 
-    function getParkDetails(uint256 parkingId)
-        public
-        view
-        returns (
-            uint256,
-            string memory name,
-            string memory place,
-            string memory pincode,
-            string memory imageHash, // Updated to string
-            address creatorWallet,
-            address buyerWallet,
-            uint256 amount,
-            string memory day,
-            string memory time,
-            bool available,
-            bool completed
-        )
+    function getParkDetails(uint256 parkingId) public view returns (ParkingDetails memory)
     {
         ParkingDetails storage details = parkingSpaces[parkingId];
-        return (
-            details.parkingId,
-            details.name,
-            details.place,
-            details.pincode,
-            details.imageHash,
-            details.creatorWallet,
-            details.buyerWallet,
-            details.amount,
-            details.day,
-            details.time,
-            details.available,
-            details.completed
-        );
+        return details;
     }
+
 
     function getAllParkDetails() public view returns (ParkingDetails[] memory) {
         ParkingDetails[] memory allDetails = new ParkingDetails[](counter);
@@ -108,17 +82,29 @@ contract ParkingContract {
             "Parking rental already completed"
         );
         require(
-            msg.sender == parkingSpaces[parkingId].creatorWallet,
-            "Only the creator can finish the parking"
+            msg.sender == parkingSpaces[parkingId].buyerWallet,
+            "Only the buyer can finish the parking"
         );
         require(
             parkingSpaces[parkingId].buyerWallet != address(0),
             "No buyer assigned for the parking"
         );
-        bool transferSuccess = payable(parkingSpaces[parkingId].buyerWallet)
+        bool transferSuccess = payable(parkingSpaces[parkingId].creatorWallet)
             .send(amount);
         require(transferSuccess, "Transfer failed");
+        parkingSpaces[parkingId].revenue += amount;
         parkingSpaces[parkingId].completed = true;
+    }
+
+
+    function generateNewParking(uint256 parkingId) public {
+        require(
+            msg.sender == parkingSpaces[parkingId].creatorWallet,
+            "Only the creator can generate a new parking listing"
+        );
+        parkingSpaces[parkingId].available = true;
+        parkingSpaces[parkingId].completed = false;
+        parkingSpaces[parkingId].buyerWallet = address(0); // Reset buyerWallet to default
     }
 
     function getCounter() public view returns (uint256) {

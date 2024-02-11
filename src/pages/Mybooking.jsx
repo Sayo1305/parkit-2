@@ -46,7 +46,7 @@ const Card = ({ data }) => {
         navigate(`/Placedetail/${data?.parkingId}`);
       }}
     >
-   {
+ {
           data?.available === true ? 
           <div className="absolute top-0 text-sm -right-2 rounded-r-md bg-green-400 px-2 ">
             Available
@@ -87,7 +87,7 @@ const Card = ({ data }) => {
   );
 };
 
-const MyParking = () => {
+const MyBooking = () => {
   const { GetContract, Walletaddress } = useContext(Appcontext);
   const [myParking, setMyParking] = useState([]);
 
@@ -99,7 +99,7 @@ const MyParking = () => {
             const data = await contract.getAllParkDetails();
             // Filter parking spaces owned by the logged-in user
             const myParkingData = data?.filter(
-              (parking) => parking?.creatorWallet?.toLowerCase() === Walletaddress?.toLowerCase()
+              (parking) => parking?.buyerWallet?.toLowerCase() === Walletaddress?.toLowerCase()
             );
             setMyParking(myParkingData);
         }else{
@@ -118,7 +118,7 @@ const MyParking = () => {
 
   return (
     <div>
-      <div className="px-16 py-2 text-3xl font-semibold">Parking created by You <CarOutlined/></div>
+      <div className="px-16 py-2 text-3xl font-semibold">Parking booked by You <CarOutlined/></div>
       <div className="mx-auto   w-11/12 h-[1px] bg-slate-400"></div>
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-items-center w-5/6 mx-auto my-0 !gap-5 p-4 flex-wrap">
         {myParking.length !== 0 ? (
@@ -133,4 +133,4 @@ const MyParking = () => {
   );
 };
 
-export default MyParking;
+export default MyBooking;

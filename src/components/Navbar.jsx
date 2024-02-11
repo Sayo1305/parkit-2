@@ -53,6 +53,9 @@ const Navbar = () => {
         Park<span className="text-purple-600 not-italic">iT</span>
       </div>
       <div className="flex gap-2 items-center">
+      <div onClick={()=> navigate('/MyBooking')} className="bg-orange-500 text-white p-2 rounded-md cursor-pointer shadow-md outline-none border-none">
+          My Booking
+        </div>
       <div onClick={()=> navigate('/myparking')} className="bg-purple-500 text-white p-2 rounded-md cursor-pointer shadow-md outline-none border-none">
           My Parking
         </div>
