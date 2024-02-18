@@ -5,7 +5,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## icon attribution
 <a href="https://www.flaticon.com/free-icons/link" title="link icons">Link icons created by Freepik - Flaticon</a>
 <a href="https://www.freepik.com/free-vector/forms-concept-illustration_12445723.htm#fromView=search&term=fill+form+&track=ais&regularType=vector&page=1&position=2&uuid=6ade2bec-9e49-49a2-b7c9-59a4b7769d26">Image by storyset</a> on Freepik
-
+<a href="https://www.freepik.com/icon/parking_708971#fromView=keyword&term=Parking&page=1&position=89&uuid=9e9ea952-571d-4a88-bdc9-ceb190dc6807">Icon by Freepik</a>
 
 ## screenshots
 <img width="600" alt="Screenshot 2024-02-12 at 3 43 18 AM" src="https://github.com/Sayo1305/parkit-2/assets/84987518/5ddd668a-072e-4ca7-b6f4-ee091d46d1a1">

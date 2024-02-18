@@ -89,7 +89,8 @@ const BuyParking = () => {
             const data = await contract.getAllParkDetails();
             //console.log(data)
             const parkingData = data?.filter(
-               (parking) => parking?.creatorWallet?.toLowerCase() !== Walletaddress?.toLowerCase()
+               (parking) => parking?.creatorWallet?.toLowerCase() !== Walletaddress?.toLowerCase() &&
+               parking?.available === true
             );
             setoriginalplace(parkingData);
             setplacelist(parkingData);

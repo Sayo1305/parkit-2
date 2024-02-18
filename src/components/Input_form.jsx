@@ -5,7 +5,6 @@ import { Button, DatePicker, Form, Input, TimePicker, notification } from "antd"
 import ImageModal from "./ImageModal";
 import { ethers } from "ethers";
 import { CheckCircleOutlined, LoadingOutlined } from "@ant-design/icons";
-import abi from "../utils/contractAbi.json";
 import dayjs from "dayjs";
 const Input_form = () => {
   const context = useContext(Appcontext);
